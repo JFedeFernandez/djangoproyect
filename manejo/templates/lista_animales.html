@@ -1,0 +1,30 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+    <div class="tabla col-7">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">N° Caravana</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Última fecha de vacunación</th>
+            <th scope="col">Última fecha de parición</th>
+          </tr>
+        </thead>
+        {% for animal in animales %}
+        <tbody>
+          <tr>
+            <th scope="row">{{animal.nro_caravana}}</th>
+            <td>{{animal.name}}</td>
+            {% for vacuna in vacunacion %}
+            <td>{{vacuna.date}}</td>
+            {% endfor %}
+            {% for pario in paricion %}
+            <td>{{pario.date}}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+        {% endfor %}
+      </table>
+    </div>
+{% endblock %}

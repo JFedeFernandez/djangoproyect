@@ -1,0 +1,17 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<div class="form-group col-3">
+
+  <select class="form-control" name="" id="" style="margin-bottom: 20px;">
+    <option selected>Número de caravana</option>
+    {% for animal in animales %}
+    <option>{{animal.nro_caravana}}</option>
+    {% endfor %}
+  </select>
+
+  <input type="text" class="form-control" name="" id="" placeholder="Fecha AAAA-MM-DD" style="margin-bottom: 20px;">
+
+  <input name="" id="" class="btn btn-primary" type="button" value="Agregar" style="margin-bottom: 20px;">
+</div>
+{% endblock %}
