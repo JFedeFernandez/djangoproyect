@@ -16,8 +16,13 @@ def cargar_vacunacion(request):
       'paricion': paricion
     })
   else:
-    id = Animales.objects.filter(nro_caravana = request.POST['caravana']).values('id').first()
-    Vacunacion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'],description=request.POST['descripcion'])
+    if not(request.POST['caravana'] == 'Número de caravana'):
+      id = Animales.objects.filter(nro_caravana = request.POST['caravana']).values('id').first()
+      if not request.POST['fecha'] == '' and not request.POST['descripcion'] == '':
+        Vacunacion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'],description=request.POST['descripcion'])
+      if not request.POST['fecha'] == '' and request.POST['descripcion'] == '':
+        Vacunacion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'],description=request.POST['descripcion'])
+    
     return redirect('/')
 
 # Def que nos permite cargar una paricion a la base de datos
@@ -33,12 +38,17 @@ def paricion(request):
       'paricion': paricion
     })
   else:
-    id = Animales.objects.filter(nro_caravana = request.POST['caravana']).values('id').first()
-    num = Animales.objects.get(id=id['id']).cant_pariciones
-    animal = Animales.objects.get(id=id['id'])
-    animal.cant_pariciones = num+1
-    animal.save()
-    Paricion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'])
+    if not(request.POST['caravana'] == 'Número de caravana'):
+      id = Animales.objects.filter(nro_caravana = request.POST['caravana']).values('id').first()
+      num = Animales.objects.get(id=id['id']).cant_pariciones
+      animal = Animales.objects.get(id=id['id'])
+      animal.cant_pariciones = num+1
+      animal.save()
+      if not(request.POST['fecha'] == ''):
+        Paricion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'])
+        return redirect('/')
+    
+    
     return redirect('/')
 
 # Def que nos permite cargar un animal a la base de datos
@@ -58,8 +68,11 @@ def carga_animal(request):
       'ult_paricion': ultimas_pariciones
     })
   else :
-    Animales.objects.create(name=request.POST['animal'], nro_caravana=request.POST['caravana'], cant_pariciones=0)
-    return redirect('/Cargar_animales/')
+    if ('animal' and 'caravana') in (request.POST and request.POST['caravana'] and request.POST['animal']):
+      Animales.objects.create(name=request.POST['animal'], nro_caravana=request.POST['caravana'], cant_pariciones=0)
+      return redirect('/Cargar_animales/')
+    
+    return redirect('/Cargar_animales')
 
 # Def que solo nos muestra los animales cargados en la base de datos
 def lista_animales(request):
@@ -136,7 +149,12 @@ def editar(request):
       'description':desc
       })
     # Si no hay vacunacion y hay paricion
-    elif not ult_v and not ult_p:
+    elif not ult_v and ult_p:
+
+      for i in ult_p:
+        p = i['ult_fecha_paricion']
+
+      id_p = Paricion.objects.get(id_animal_id=animal.id, date=p)
 
       return render(request, 'editar_animal.html',{
       'animales':animales,
@@ -145,6 +163,7 @@ def editar(request):
       'ult_p':ult_p,
       'ult_v':ult_v,
       'id_a':animal,
+      'id_p':id_p,
       'description':desc
       })
 
@@ -171,7 +190,6 @@ def editar(request):
 
 
     if 'id_p' in request.POST and request.POST['id_p']:
-      print('Tiene id paricion')
       p = Paricion.objects.get(id=request.POST['id_p'])
       p.date = request.POST['fecha_p']
       p.save()
