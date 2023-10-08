@@ -1,6 +1,7 @@
 {% extends "base_template.html" %}
-
+{% load tz %}
 {% block content %}
+
     <div class="tabla col-7">
       <table class="table">
         <thead>
@@ -9,22 +10,43 @@
             <th scope="col">Categoria</th>
             <th scope="col">Última fecha de vacunación</th>
             <th scope="col">Última fecha de parición</th>
+            <th scope="col">Editar/Eliminar</th>
           </tr>
         </thead>
-        {% for animal in animales %}
         <tbody>
+        {% for animal in animales %}
           <tr>
             <th scope="row">{{animal.nro_caravana}}</th>
             <td>{{animal.name}}</td>
-            {% for vacuna in vacunacion %}
-            <td>{{vacuna.date}}</td>
-            {% endfor %}
-            {% for pario in paricion %}
-            <td>{{pario.date}}</td>
-            {% endfor %}
+              <td>
+                {% for vacuna in ult_vacunacion %}
+                  {% if vacuna.id_animal_id == animal.id %}
+                    {{vacuna.ultima_fecha|date:"Y-m-d"}}
+                  {% endif %}
+                {% endfor %}
+              </td>
+              <td>
+                {% for pario in ult_paricion %}
+                  {% if pario.id_animal_id == animal.id %}
+                    {{pario.ultima_fecha|date:"Y-m-d"}}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            <td>
+              <form action="/Editar/" method="GET">
+                {% csrf_token %}
+                <input type="hidden" name="animal_id" value="{{ animal.id }}">
+                <input type="submit" name="editar" class="btn btn-primary btn-sm" value="Editar" style="margin-bottom: 5px;">
+              </form>
+              <form action="/Lista_animales/" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="animal_id" value="{{ animal.id }}">
+                <input type="submit" name="eliminar" class="btn btn-danger btn-sm" value="Eliminar" style="margin-bottom: 5px;">
+              </form>
+            </td>
           </tr>
-        </tbody>
         {% endfor %}
+      </tbody>
       </table>
     </div>
 {% endblock %}

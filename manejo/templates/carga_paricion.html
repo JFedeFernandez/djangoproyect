@@ -1,7 +1,7 @@
 {% extends "base_template.html" %}
 
 {% block content %}
-<form action="/Cargar_Vacunacion/" class="form-group col-3" method="POST">
+<form action="/Cargar_pariciones/" class="form-group col-3" method="POST">
   {% csrf_token %}
   <select class="form-control" name="caravana" id="caravana" style="margin-bottom: 20px;">
     <option selected>Número de caravana</option>
@@ -12,9 +12,6 @@
 
   <input type="text" class="form-control" name="fecha" id="fecha" placeholder="Fecha AAAA-MM-DD" style="margin-bottom: 20px;">
 
-  <label for="">Descripción</label>
-  <input type="textarea" class="form-control" name="descripcion" id="descripcion" cols="30" rows="10" style="margin-bottom: 20px;">
-  
   <input name="" id="" class="btn btn-primary" type="submit" value="Agregar" style="margin-bottom: 20px;">
 </form>
 {% endblock %}

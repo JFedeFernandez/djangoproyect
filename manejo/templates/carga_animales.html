@@ -1,20 +1,21 @@
 {% extends "base_template.html" %}
 
 {% block content %}
-  <div class="form-group col-3">
-    <select class="form-control" name="" id="" style="margin-bottom: 20px;">
+  <form action="/Cargar_animales/" class="form-group col-3" method="POST">
+    {% csrf_token %}
+    <select class="form-control" name="animal" id="animal" style="margin-bottom: 20px;">
       <option selected>Elije un animal</option>
-      <option value="1">Vaca</option>
-      <option value="2">Vaquillona</option>
-      <option value="3">Ternero</option>
-      <option value="4">Toro</option>
+      <option value="Vaca">Vaca</option>
+      <option value="Vaquillona">Vaquillona</option>
+      <option value="Ternero">Ternero</option>
+      <option value="Toro">Toro</option>
     </select>
 
     <input type="number" min="1" pattern="^[0-9]+"
-      class="form-control" name="" id="" aria-describedby="helpId" placeholder="Número de caravana" style="margin-bottom: 20px;">
+      class="form-control" name="caravana" id="caravana" aria-describedby="helpId" placeholder="Número de caravana" style="margin-bottom: 20px;">
 
-    <input name="" id="" class="btn btn-primary" type="button" value="Agregar" style="margin-bottom: 20px;">
-  </div>
+    <input name="" id="" class="btn btn-primary" type="submit" value="Agregar" style="margin-bottom: 20px;">
+  </form>
   
   <div class="tabla col-7">
     <table class="table">
@@ -31,11 +32,15 @@
         <tr>
           <th scope="row">{{animal.nro_caravana}}</th>
           <td>{{animal.name}}</td>
-          {% for vacuna in vacunacion %}
-          <td>{{vacuna.date}}</td>
+          {% for vacuna in ult_vacunacion %}
+            {% if vacuna.id_animal_id == animal.id %}
+            <td>{{vacuna.ultima_fecha|date:"Y-m-d"}}</td>
+            {% endif %}
           {% endfor %}
-          {% for pario in paricion %}
-          <td>{{pario.date}}</td>
+          {% for pario in ult_paricion %}
+            {% if pario.id_animal_id == animal.id %}
+            <td>{{pario.ultima_fecha|date:"Y-m-d"}}</td>
+            {% endif %}
           {% endfor %}
         </tr>
       </tbody>

@@ -15,8 +15,8 @@
     <div class="botonera">
       <a class="btn btn-primary btn-lg" href="{% url 'cargar_animales' %}">Cargar Animales</a>
       <a class="btn btn-primary btn-lg" href="{% url 'lista_animales' %}">Listas de Animales</a>
-      <a class="btn btn-primary btn-lg" href="{% url 'carga_vacunas' %}">Vacunaciones</a>
-      <a class="btn btn-primary btn-lg" href="">Pariciones</a>
+      <a class="btn btn-primary btn-lg" href="{% url 'carga_vacunas' %}">Cargar Vacunaciones</a>
+      <a class="btn btn-primary btn-lg" href="{% url 'carga_pariciones' %}">Cargar Pariciones</a>
     </div>
 
     {% block content %}{% endblock %}
