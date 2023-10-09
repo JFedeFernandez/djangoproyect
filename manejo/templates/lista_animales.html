@@ -1,15 +1,35 @@
 {% extends "base_template.html" %}
 {% load tz %}
 {% block content %}
-
+    
     <div class="tabla col-7">
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">N° Caravana</th>
-            <th scope="col">Categoria</th>
-            <th scope="col">Última fecha de vacunación</th>
-            <th scope="col">Última fecha de parición</th>
+            <th scope="col">N° Caravana
+              <form action="" method="GET" class="form-inline" style="margin-bottom: 10px;">
+                <input type="text" class="form-control form-control-sm" placeholder="Buscar.." name="buscar_c">
+                <button hidden type="submit" class="btn btn-secondary">Buscar</button>
+            </form>
+            </th>
+            <th scope="col">Categoria
+              <form action="" method="GET" class="form-inline" style="margin-bottom: 10px;">
+                <input type="text" class="form-control form-control-sm" placeholder="Buscar.." name="buscar_t">
+                <button hidden type="submit" class="btn btn-secondary">Buscar</button>
+            </form>
+            </th>
+            <th scope="col">Última fecha de vacunación
+              <form action="" method="GET" class="form-inline" style="margin-bottom: 10px;">
+                <input type="text" class="form-control form-control-sm" placeholder="Buscar.." name="buscar_v">
+                <button hidden type="submit" class="btn btn-secondary">Buscar</button>
+            </form>
+            </th>
+            <th scope="col">Última fecha de parición
+              <form action="" method="GET" class="form-inline" style="margin-bottom: 10px;">
+                <input type="text" class="form-control form-control-sm" placeholder="Buscar.." name="buscar_p">
+                <button hidden type="submit" class="btn btn-secondary">Buscar</button>
+            </form>
+            </th>
             <th scope="col">Editar/Eliminar</th>
           </tr>
         </thead>

@@ -1,6 +1,6 @@
 from .models import Animales, Vacunacion, Paricion
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Max
+from django.db.models import Max, Q
 from datetime import date, datetime
 
 # Def que nos permite cargar una vacunacion a la base de datos
@@ -68,9 +68,10 @@ def carga_animal(request):
       'ult_paricion': ultimas_pariciones
     })
   else :
-    if ('animal' and 'caravana') in (request.POST and request.POST['caravana'] and request.POST['animal']):
-      Animales.objects.create(name=request.POST['animal'], nro_caravana=request.POST['caravana'], cant_pariciones=0)
-      return redirect('/Cargar_animales/')
+    if 'animal' in request.POST and request.POST['animal']:
+      if 'caravana' in request.POST and request.POST['caravana']:
+        Animales.objects.create(name=request.POST['animal'], nro_caravana=request.POST['caravana'], cant_pariciones=0)
+        return redirect('/Cargar_animales/')
     
     return redirect('/Cargar_animales')
 
@@ -82,12 +83,68 @@ def lista_animales(request):
   ultimas_vacunaciones = Vacunacion.objects.values('id_animal_id').annotate(ultima_fecha=Max('date')).values('id_animal_id', 'ultima_fecha')
   ultimas_pariciones = Paricion.objects.values('id_animal_id').annotate(ultima_fecha=Max('date')).values('id_animal_id', 'ultima_fecha')
 
+  buscar_c = request.GET.get('buscar_c')
+  buscar_t = request.GET.get('buscar_t')
+  buscar_v = request.GET.get('buscar_v')
+  buscar_p = request.GET.get('buscar_p')
+
+  # Filtro para buscar por tipo
+  if buscar_t:
+    animal = Animales.objects.filter(Q(name__icontains = buscar_t)).distinct()
+
+    return render(request, 'lista_animales.html',{
+      'animales': animal,
+      'vacunacion': vacunacion,
+      'paricion': paricion,
+      'ult_vacunacion': ultimas_vacunaciones,
+      'ult_paricion':ultimas_pariciones
+    })
+
+  # Filtro para buscar por caravana
+  if buscar_c:
+    animal = Animales.objects.filter(
+      Q(nro_caravana__icontains = buscar_c)
+    ).distinct()
+
+    return render(request, 'lista_animales.html',{
+      'animales': animal,
+      'vacunacion': vacunacion,
+      'paricion': paricion,
+      'ult_vacunacion': ultimas_vacunaciones,
+      'ult_paricion':ultimas_pariciones
+    })
+
+  # Filtro para buscar por fecha vacunacion
+  if buscar_v:
+    vacunas = Animales.objects.filter(vacunacion__date=buscar_v)
+
+    return render( request, 'lista_animales.html',{
+      'animales': vacunas,
+      'vacunacion': vacunacion,
+      'paricion': paricion,
+      'ult_vacunacion': ultimas_vacunaciones,
+      'ult_paricion': ultimas_pariciones,
+    })
+  
+  # Filtro para buscar por fecha de paricion
+  if buscar_p:
+    par = Animales.objects.filter(paricion__date=buscar_p)
+
+    return render( request, 'lista_animales.html',{
+      'animales': par,
+      'vacunacion': vacunacion,
+      'paricion': paricion,
+      'ult_vacunacion': ultimas_vacunaciones,
+      'ult_paricion': ultimas_pariciones,
+    })
+
+  
   return render(request, 'lista_animales.html',{
     'animales': animales,
     'vacunacion': vacunacion,
     'paricion': paricion,
     'ult_vacunacion': ultimas_vacunaciones,
-    'ult_paricion': ultimas_pariciones
+    'ult_paricion': ultimas_pariciones,
   })
 
 # Def que funciona cuando hacemos click en editar
