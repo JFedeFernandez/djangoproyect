@@ -11,7 +11,7 @@
         <input type="hidden" class="form-control" name="id_v" id="id_v" style="margin-bottom: 20px;" value="{{id_v.id}}">
         <input type="text" class="form-control" name="fecha_v" id="fecha_v" placeholder="AAAA-MM-DD" style="margin-bottom: 20px;" value="{{ ult_v.0.ult_fecha_vacunacion|date:"Y-m-d" }}">
         <label for="">Descripción</label>
-        <input type="textarea" class="form-control" name="descripcion" id="descripcion" cols="30" rows="10" style="margin-bottom: 20px;" value="{{description.0.description}}"> 
+        <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="5" style="margin-bottom: 20px;">{{description.0.description}}</textarea>
         {% endif %}
         {% if id_p.id %}
         <label for="">Fecha de parición</label>

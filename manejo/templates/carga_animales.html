@@ -14,6 +14,13 @@
     <input type="number" min="1" pattern="^[0-9]+"
       class="form-control" name="caravana" id="caravana" aria-describedby="helpId" placeholder="Número de caravana" style="margin-bottom: 20px;">
 
+    <select class="form-control" name="edad" id="edad" style="margin-bottom: 20px;">
+      <option selected>Elije la edad</option>
+      <option value="Vaca-vieja">Vaca vieja</option>
+      <option value="Medio-diente">Medio diente</option>
+      <option value="Vaca-nueva">Vaca nueva</option>
+    </select>
+
     <input name="" id="" class="btn btn-primary" type="submit" value="Agregar" style="margin-bottom: 20px;">
   </form>
   
@@ -25,6 +32,7 @@
           <th scope="col">Categoria</th>
           <th scope="col">Última fecha de vacunación</th>
           <th scope="col">Última fecha de parición</th>
+          <th scope="col">Edad</th>
         </tr>
       </thead>
       {% for animal in animales %}
@@ -32,16 +40,21 @@
         <tr>
           <th scope="row">{{animal.nro_caravana}}</th>
           <td>{{animal.name}}</td>
-          {% for vacuna in ult_vacunacion %}
-            {% if vacuna.id_animal_id == animal.id %}
-            <td>{{vacuna.ultima_fecha|date:"Y-m-d"}}</td>
-            {% endif %}
-          {% endfor %}
-          {% for pario in ult_paricion %}
-            {% if pario.id_animal_id == animal.id %}
-            <td>{{pario.ultima_fecha|date:"Y-m-d"}}</td>
-            {% endif %}
-          {% endfor %}
+          <td>
+            {% for vacuna in ult_vacunacion %}
+              {% if vacuna.id_animal_id == animal.id %}
+              {{vacuna.ultima_fecha|date:"Y-m-d"}}
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            {% for pario in ult_paricion %}
+              {% if pario.id_animal_id == animal.id %}
+              {{pario.ultima_fecha|date:"Y-m-d"}}
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td>{{animal.edad}}</td>
         </tr>
       </tbody>
       {% endfor %}

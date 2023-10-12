@@ -2,7 +2,7 @@
 {% load tz %}
 {% block content %}
     
-    <div class="tabla col-7">
+    <div class="tabla col-9">
       <table class="table">
         <thead>
           <tr>
@@ -30,7 +30,14 @@
                 <button hidden type="submit" class="btn btn-secondary">Buscar</button>
             </form>
             </th>
-            <th scope="col">Editar/Eliminar</th>
+            <th scope="col">Edad
+              <form action="" method="GET" class="form-inline" style="margin-bottom: 10px;">
+              </form>
+            </th>
+            <th scope="col">Editar/Eliminar
+              <form action="" method="GET" class="form-inline" style="margin-bottom: 10px;">
+              </form>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -52,6 +59,7 @@
                   {% endif %}
                 {% endfor %}
               </td>
+            <td>{{animal.edad}}</td>
             <td>
               <form action="/Editar/" method="GET">
                 {% csrf_token %}

@@ -18,10 +18,10 @@ def cargar_vacunacion(request):
   else:
     if not(request.POST['caravana'] == 'Número de caravana'):
       id = Animales.objects.filter(nro_caravana = request.POST['caravana']).values('id').first()
-      if not request.POST['fecha'] == '' and not request.POST['descripcion'] == '':
-        Vacunacion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'],description=request.POST['descripcion'])
-      if not request.POST['fecha'] == '' and request.POST['descripcion'] == '':
-        Vacunacion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'],description=request.POST['descripcion'])
+      if not request.POST['fecha'] == '' and not request.POST['t_area'] == '':
+        Vacunacion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'],description=request.POST['t_area'])
+      if not request.POST['fecha'] == '' and request.POST['t_area'] == '':
+        Vacunacion.objects.create(date=request.POST['fecha'], id_animal_id=id['id'],description=request.POST['t_area'])
     
     return redirect('/')
 
@@ -68,9 +68,8 @@ def carga_animal(request):
       'ult_paricion': ultimas_pariciones
     })
   else :
-    if 'animal' in request.POST and request.POST['animal']:
-      if 'caravana' in request.POST and request.POST['caravana']:
-        Animales.objects.create(name=request.POST['animal'], nro_caravana=request.POST['caravana'], cant_pariciones=0)
+    if ('animal' in request.POST and request.POST['animal']) and ('caravana' in request.POST and request.POST['caravana']) and ('edad' in request.POST and request.POST['edad']):
+        Animales.objects.create(name=request.POST['animal'], nro_caravana=request.POST['caravana'], cant_pariciones=0,edad=request.POST['edad'])
         return redirect('/Cargar_animales/')
     
     return redirect('/Cargar_animales')

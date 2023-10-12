@@ -7,6 +7,7 @@ class Animales(models.Model):
   name = models.CharField(max_length=100, verbose_name="Animal")
   nro_caravana = models.IntegerField(verbose_name="Número de caravana")
   cant_pariciones = models.IntegerField(verbose_name="Cant paricion", blank=True, null=True)
+  edad = models.CharField(max_length=100, verbose_name="Edad",default="")
   
   def __str__(self):
     return self.name + '-' + str(self.nro_caravana)
