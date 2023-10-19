@@ -1,7 +1,11 @@
+import os
 from .models import Animales, Vacunacion, Paricion
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Max, Q
 from datetime import date, datetime
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('agg')
 
 # Def que nos permite cargar una vacunacion a la base de datos
 def cargar_vacunacion(request):
@@ -265,3 +269,53 @@ def eliminar(request):
   animal.delete()
 
   return redirect('/')
+
+def grafico(request):
+
+  # Creamos el gráfico del Plantel completo
+
+  v = Animales.objects.filter(name='Vaca').count()
+  t = Animales.objects.filter(name='Toro').count()
+  vaq = Animales.objects.filter(name='Vaquillona').count()
+  ter = Animales.objects.filter(name='Ternero').count()
+
+  ruta = '/home/fedecai93/Documentos/djangoproyect/manejo/static/img/'
+  tipos = ['Vaca', 'Vaquillona', 'Toro', 'Ternero']
+  cant = [v,vaq,t,ter]
+  name = 'Plantel.png'
+
+  ret_graf(ruta,tipos,cant,name)
+
+  # ---------------------------------------
+
+  # Creamos el gráfico de Páriciones
+
+  animales = Animales.objects.values()
+
+  parieron = 0
+  no_parieron = 0
+
+  for animal in animales:
+    if animal['cant_pariciones'] > 0 :
+      parieron = parieron+1
+    else:
+      no_parieron = no_parieron+1
+
+  tipos = ['Parieron', 'No Parieron']
+  cant = [parieron, no_parieron]
+  name = 'Paricion.png'
+  ret_graf(ruta,tipos,cant,name)
+
+  # ---------------------------------------
+
+  return render(request, 'grafico.html',{})
+
+def ret_graf(ruta, tipos, cantidad, name):
+
+  fig, ax = plt.subplots()
+  ax.pie(cantidad, labels=tipos, autopct='%1.1f%%')
+  ruta_g = os.path.join(ruta,name)
+  plt.savefig(ruta_g)
+  plt.close()
+  
+  return 
