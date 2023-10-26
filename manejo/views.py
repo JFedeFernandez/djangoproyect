@@ -345,12 +345,22 @@ def grafico(request):
 
   # Creamos el gráfico de Mortandad
 
+  vendidos = Vendido.objects.count()
+  muertos = Muerto.objects.count()
+
+  tipos = ['Muertos', 'Vendidos']
+  cant = [muertos, vendidos]
+  name = 'Mortandad.png'
+
+  ret_graf(ruta, tipos,cant, name)
+
   return render(request, 'grafico.html',{})
 
 def ret_graf(ruta, tipos, cantidad, name):
   fig, ax = plt.subplots()
   ax.pie(cantidad, labels=tipos, autopct='%1.1f%%')
   ruta_g = os.path.join(ruta,name)
+  print(ruta_g)
   plt.savefig(ruta_g)
   plt.close()
   
