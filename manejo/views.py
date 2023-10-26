@@ -1,5 +1,8 @@
+import math
 import os
-from .models import Animales, Vacunacion, Paricion
+
+import numpy as np
+from .models import Animales, Vacunacion, Paricion, Vendido, Muerto
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Max, Q
 from datetime import date, datetime
@@ -265,10 +268,42 @@ def editar(request):
 
 # Def nos permite eliminar un animal seleccionado
 def eliminar(request):
-  animal = Animales.objects.get(id=request.POST['animal_id'])
+  animal = Animales.objects.get(id=request.POST['id'])
+  if request.POST['eliminar'] == '1':
+    Vendido.objects.create(name=animal.name, nro_caravana=animal.nro_caravana)
+  else:
+    Muerto.objects.create(name=animal.name, nro_caravana=animal.nro_caravana)
+
   animal.delete()
 
   return redirect('/')
+
+def eliminar2(request):
+  animal = Animales.objects.get(id=request.POST['animal_id'])
+  lista_ult_p = Paricion.objects.values('id_animal_id').annotate(ult_fecha_paricion=Max('date'))
+  lista_ult_v = Vacunacion.objects.values('id_animal_id').annotate(ult_fecha_vacunacion=Max('date'))
+  ult_p = lista_ult_p.filter(id_animal_id=request.POST['animal_id']).values('ult_fecha_paricion')
+  ult_v = lista_ult_v.filter(id_animal_id=request.POST['animal_id']).values('ult_fecha_vacunacion')
+  if ult_p and ult_v:
+    return render(request, 'eliminar.html',{
+      'id_a':animal,
+      'ult_p':ult_p,
+      'ult_v':ult_v,
+    })
+  elif ult_p and not ult_v:
+    return render(request, 'eliminar.html',{
+      'id_a': animal,
+      'ult_p':ult_p,
+    })
+  elif  not(ult_p) and ult_v:
+    return render(request, 'eliminar.html',{
+      'id_a': animal,
+      'ult_v': ult_v,
+    })
+  
+  return render(request, 'eliminar.html',{
+    'id_a':animal,
+  })
 
 def grafico(request):
 
@@ -308,10 +343,11 @@ def grafico(request):
 
   # ---------------------------------------
 
+  # Creamos el gráfico de Mortandad
+
   return render(request, 'grafico.html',{})
 
 def ret_graf(ruta, tipos, cantidad, name):
-
   fig, ax = plt.subplots()
   ax.pie(cantidad, labels=tipos, autopct='%1.1f%%')
   ruta_g = os.path.join(ruta,name)

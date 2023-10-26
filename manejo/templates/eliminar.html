@@ -1,0 +1,26 @@
+{% extends "base_template.html" %}
+{% load static %}
+
+{% block content %}
+<form action="/Lista_animales/" class="form-group col-3" method="POST">
+  {% csrf_token %}
+  <input type="hidden" class="form-control" name="id" id="id" style="margin-bottom: 20px;" value="{{id_a.id}}">
+  <label for="">Número de caravana</label>
+  <input type="text" class="form-control" name="nro_caravana" id="nro_caravana" placeholder="{{id_a.nro_caravana}}" style="margin-bottom: 20px;" value="{{id_a.nro_caravana}}" disabled>
+  {% if ult_v %}
+  <label for="">Fecha de vacunación</label>
+  <input type="hidden" class="form-control" name="id_v" id="id_v" style="margin-bottom: 20px;" value="{{id_v.id}}" disabled>
+  <input type="text" class="form-control" name="fecha_v" id="fecha_v" placeholder="AAAA-MM-DD" style="margin-bottom: 20px;" value="{{ ult_v.0.ult_fecha_vacunacion|date:"Y-m-d" }}" disabled>
+  <label for="">Descripción</label>
+  <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="5" style="margin-bottom: 20px;" disabled>{{description.0.description}}</textarea>
+  {% endif %}
+  {% if ult_p %}
+  <label for="">Fecha de parición</label>
+  <input type="hidden" class="form-control" name="id_p" id="id_p" style="margin-bottom: 20px;" value="{{id_p.id}}" disabled>
+  <input type="text" class="form-control" name="fecha_p" id="fecha_p" placeholder="AAAA-MM-DD" style="margin-bottom: 20px;" value="{{ ult_p.0.ult_fecha_paricion|date:"Y-m-d" }}" disabled>
+  {% endif %}
+  <button type="submit" class="btn btn-primary btn-sm" value="1" name="eliminar">Vendido</button>
+  <button type="submit" class="btn btn-primary btn-sm" value="2" name="eliminar">Murio</button>
+</form>
+
+{% endblock content %}

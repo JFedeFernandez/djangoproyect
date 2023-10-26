@@ -19,3 +19,7 @@ a{
 .box{
   border: solid 1px black;
 }
+
+.contenido{
+  align-items: center;
+}

@@ -22,3 +22,13 @@ class Paricion(models.Model):
   id = models.BigAutoField(primary_key=True)
   date = models.DateField(verbose_name="Fecha")
   id_animal = models.ForeignKey(Animales, on_delete=models.CASCADE)
+
+class Vendido(models.Model):
+  id = models.BigAutoField(primary_key=True)
+  nro_caravana = models.IntegerField(verbose_name="Número de caravana")
+  name = models.CharField(max_length=100, verbose_name="Animal")
+
+class Muerto(models.Model):
+  id = models.BigAutoField(primary_key=True)
+  nro_caravana = models.IntegerField(verbose_name="Número de caravana")
+  name = models.CharField(max_length=100, verbose_name="Animal")
