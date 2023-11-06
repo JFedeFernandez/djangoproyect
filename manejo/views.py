@@ -1,11 +1,8 @@
-import math
 import os
 
-import numpy as np
 from .models import Animales, Vacunacion, Paricion, Vendido, Muerto
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.db.models import Max, Q
-from datetime import date, datetime
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('agg')
@@ -360,7 +357,6 @@ def ret_graf(ruta, tipos, cantidad, name):
   fig, ax = plt.subplots()
   ax.pie(cantidad, labels=tipos, autopct='%1.1f%%')
   ruta_g = os.path.join(ruta,name)
-  print(ruta_g)
   plt.savefig(ruta_g)
   plt.close()
   
